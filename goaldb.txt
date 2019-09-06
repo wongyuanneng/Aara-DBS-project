@@ -1,0 +1,1 @@
+{"Car": {"DataFile1": "coeData.csv", "DataFile2": "carPrices.csv", "DataFile3": "", "Arima file": "carArimaModel.pkl", "Arima month": 9}, "House": {"DataFile1": "housePrices.csv", "DataFile2": "", "DataFile3": "", "Arima file": "houseArimaModel.pkl", "Arima month": ""}}
