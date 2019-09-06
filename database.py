@@ -68,7 +68,7 @@ def recreateData():
 	"Goal": "Car",
         "Marital status": "Married",
         "Number of dependencies": 0,
-        "Transaction data file": "transactionData.csv",
+        "Transaction data file": "sam1234_transactionData.csv",
         "Savings_arima": "",
         "Savings_arima_month": "",
         "Clothing & Footwear_arima": "",
@@ -127,21 +127,28 @@ def recreateData():
     with open('goaldb.txt', 'w') as outfile:
         json.dump(goaldata, outfile)
 
-def register():
+def register(UserDB):
     print("Let's be friends! But first, would you like to introduce yourself? :)\n")
     userid = input('Userid: \n')
     name = input('Name: \n')
     #balance = get from bank system
     balance = input('balance: \n')
     goal = input('Input 1 goal you would like to achieve in 5 years: \n')
-    marital = input('Input marital status: \n')
-    dependencies = input('Input number of dependencies: \n')
+    marital = input('Input marital status (Single/Married): \n')
+    while (True):
+        try:
+            dependencies = int(input('Input number of dependencies: \n'))
+        except ValueError:
+            print("Input must be a number!")
+        else:
+            break;
+        
     UserDB[userid] = {
         "Name": name,
 	"UserID": userid,
 	"Balance": balance,
 	"Goal": goal,
-        "Marital status": marital,
+        "Marital status": marital.capitalize(),
         "Number of dependencies": dependencies,
         "Transaction data file": userid+"_transactionData.csv",
         "Savings_arima": "",
@@ -183,6 +190,8 @@ def register():
     with open('userdb.txt', 'w') as outfile:
             json.dump(UserDB, outfile)
 
+    return userid;
+
 def testScore(train_test, model):
     y_pred = model.predict(n_periods=len(train_test))
 
@@ -195,7 +204,7 @@ def testScore(train_test, model):
 
 
 def arimaAnalysis(df, settings, fname):
-    model = auto_arima(df, trace=True, start_p=settings[0], start_q=settings[1], start_P=settings[2], start_Q=settings[3],
+    model = auto_arima(df, trace=False, start_p=settings[0], start_q=settings[1], start_P=settings[2], start_Q=settings[3],
                   max_p=40, max_q=40, max_d=40, max_P=40, max_Q=40, seasonal=settings[4], m=12, stationary=settings[5],
                   stepwise=True, suppress_warnings=True,
                   error_action='ignore',approximation = False)

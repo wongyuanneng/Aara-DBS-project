@@ -103,6 +103,35 @@ def reviewTransaction(UserDB, userid):
             df = database.categoricalAnalysis(UserDB, userid, "Transport", 1)
             title = "Transport"
         elif (choice == '0'):
+            if (payRaise):
+                print("Congrats on your recent pay raise and/or promotion! :)")
+
+            if (foodsvcRaise):
+                print("Seems like you had an event recently...")
+                if (clothesRaise and recRaise and transferrableRaise and (UserDB[userid]['Marital status']=='Single')): #marriage event
+                    print("Let me guess... did you just get married?? Congratulations!!!")
+                    a = input("1. Oh, thank you! :)\n2. No, what are you talking about?\n")
+                    if (a=='1'):
+                        UserDB[userid]['Marital status'] = 'Married'
+                        UserDB[userid]['Number of dependencies'] +=1
+                        with open('userdb.txt', 'w') as outfile:
+                            json.dump(UserDB, outfile)
+                elif (clothesRaise and transferrableRaise and healthcareRaise): #baby first month
+                    print("Let me guess... it must be for celebrating your baby being 1 month old!\n")
+            if (hospitalRaise): #detect hospitalisation
+                if (clothesRaise and foodRaise and (UserDB[userid]['Marital status']=='Married')):
+                    print("Congratulations on your baby! :)")
+                    a = input("1. Oh, thank you! :)\n2. No, what are you talking about?\n")
+                    if (a=='1'):
+                        UserDB[userid]['Number of dependencies'] +=1
+                        with open('userdb.txt', 'w') as outfile:
+                            json.dump(UserDB, outfile)
+            else:
+                print("Oh no! Seems like someone got hospitalised! Are you and your family OK? :(")
+
+            if (recRaise):
+                print("Seems like you went for a holiday! How was it? Hope you had a fun and relaxing time! :)")
+                    
             print("Hope you have learnt something from this review session! :)")
         else:
             print('You have entered an invalid selection.')
@@ -118,38 +147,6 @@ def reviewTransaction(UserDB, userid):
             plt.ylabel('Amount per month')
             plt.plot()
             plt.show()
-
-    if (payRaise):
-        print("Congrats on your recent pay raise and/or promotion! :)")
-
-    if (foodsvcRaise):
-        print("Seems like you had an event recently...")
-        if (clothesRaise and recRaise and transferrableRaise and (UserDB[userid]['Marital status']=='Single')): #marriage event
-            print("Let me guess... did you just get married?? Congratulations!!!")
-            a = input("1. Oh, thank you! :)\n2. No, what are you talking about?\n")
-            if (a=='1'):
-                UserDB[userid]['Marital status'] = 'Married'
-                UserDB[userid]['Number of dependencies'] +=1
-                with open('userdb.txt', 'w') as outfile:
-                    json.dump(UserDB, outfile)
-        elif (clothesRaise and transferrableRaise and healthcareRaise): #baby first month
-            print("Let me guess... it must be for celebrating your baby being 1 month old!\n")
-    elif (hospitalRaise): #detect hospitalisation
-        if (clothesRaise and foodRaise and (UserDB[userid]['Marital status']=='Married')):
-            print("Congratulations on your baby! :)")
-            a = input("1. Oh, thank you! :)\n2. No, what are you talking about?\n")
-            if (a=='1'):
-                UserDB[userid]['Number of dependencies'] +=1
-                with open('userdb.txt', 'w') as outfile:
-                    json.dump(UserDB, outfile)
-        else:
-            print("Oh no! Seems like someone got hospitalised! Are you and your family OK? :(")
-
-    if (recRaise):
-        print("Seems like you went for a holiday! How was it? Hope you had a fun and relaxing time! :)")
-                    
-        
-        
     
 
 def editGoals(UserDB, userid):
@@ -209,7 +206,7 @@ def futurePlanner(UserDB, userid, savingsForecast):
 
 if __name__=="__main__":
     print("Hello, I'm Aara. Nice to meet you :)")
-    #database.recreateData();
+    database.recreateData();
     userid = input('Please enter your Userid: ')
     print("Remember NOT to give anybody your password. Even the admin, which is myself, will not ask you for your password.")
     #need userid to identify the user. Userid should be automatically identified by the system, not through user input. User is required to be already logged in online before accessing this service. As such, passwords are not required (but can be implemented).
@@ -217,10 +214,11 @@ if __name__=="__main__":
     with open('userdb.txt') as json_file:
         UserDB = json.load(json_file)
 
-    if not(userid in UserDB.keys()):
+    while not(userid in UserDB.keys()):
         choice = input("Invalid account! Looks like you have not registered for this service yet. Are you a new user? (Y/N)")
         if (choice=='y' or choice=='Y'):
-            database.register()
+            userid = database.register(UserDB) #***Pls use john5678 as new userid
+            #getData(userid, userid+'_transactionData') --> to be implemented as a function that gets data directly from transaction db and output into userid_transactionData.csv file.
         else:
             userid = input("Please reenter userid:")
     
