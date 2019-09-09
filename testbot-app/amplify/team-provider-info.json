@@ -1,0 +1,19 @@
+{
+    "test": {
+        "awscloudformation": {
+            "AuthRoleName": "testbot-app-test-20190827025213-authRole",
+            "UnauthRoleArn": "arn:aws:iam::585374634411:role/testbot-app-test-20190827025213-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::585374634411:role/testbot-app-test-20190827025213-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "testbot-app-test-20190827025213-deployment",
+            "UnauthRoleName": "testbot-app-test-20190827025213-unauthRole",
+            "StackName": "testbot-app-test-20190827025213",
+            "StackId": "arn:aws:cloudformation:us-east-1:585374634411:stack/testbot-app-test-20190827025213/5988d610-c8b0-11e9-a331-0e6311020172"
+        },
+        "categories": {
+            "auth": {
+                "cognitof5521c77": {}
+            }
+        }
+    }
+}
